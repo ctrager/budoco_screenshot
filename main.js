@@ -71,7 +71,7 @@ var selection_size
 ipcMain.handle('selected', (event, top, left, width, height) => {
 
     console.log("main", top, left, width, height);
-    selection_size = {top: top, left: left, width: width, height: height}
+    selection_size = {x: top, y: left, width: width, height: height}
 
     transparent_win.close()
     main_win.hide()
@@ -89,8 +89,9 @@ function capture() {
 
     desktopCapturer.getSources(options).then(async sources => {
         for (const source of sources) {
+            cropped = source.thumbnail.crop(selection_size)
             try {
-                fs.writeFile("MY_SCREENSHOT.PNG", source.thumbnail.toPNG(), handle_fs_error)
+                fs.writeFile("MY_SCREENSHOT.PNG", cropped.toPNG(), handle_fs_error)
 
             }
             catch (e) {

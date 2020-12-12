@@ -62,7 +62,7 @@ document.addEventListener("mouseup", (e) => {
 
     console.log('selected', region.style.top, region.style.left, region.style.width, region.style.height)
 
-    ipcRenderer.invoke('selected', region.style.top, region.style.left, region.style.width, region.style.height)
+    ipcRenderer.invoke('selected', num(region.style.top), num(region.style.left), num(region.style.width), num(region.style.height))
 
     // Reset
     is_selecting = false;
