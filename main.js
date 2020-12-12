@@ -3,6 +3,10 @@ const electron = require('electron')
 const {ipcMain} = require('electron');
 var win
 
+app.commandLine.appendSwitch('enable-transparent-visuals');
+app.commandLine.appendSwitch('disable-gpu');
+
+
 function createWindow() {
     console.log("inside createWindow")
     win = new BrowserWindow({
@@ -18,6 +22,23 @@ function createWindow() {
 
 }
 
+function createTransparentWindow() {
+    const win = new BrowserWindow({
+        frame: false,
+        width: 400,
+        height: 400,
+        // fullScreen: true,
+        transparent: true,
+        webPreferences: {
+            nodeIntegration: true
+
+        }
+    })
+
+    win.loadFile('transparent.html')
+    // win.setFullScreen(true);
+}
+
 app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
@@ -25,6 +46,7 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 })
+
 
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -38,6 +60,9 @@ ipcMain.handle('my-action', (event, arg) => {
     console.log("corey 1", arg)
 })
 
+ipcMain.handle('show-transparent', (event, arg) => {
+    createTransparentWindow()
+})
 
 
 ipcMain.handle('my-action2', (event, arg) => {
@@ -52,3 +77,5 @@ ipcMain.handle('my-action2', (event, arg) => {
     }
 
 })
+
+///--enable-transparent-visuals --disable-gpu 

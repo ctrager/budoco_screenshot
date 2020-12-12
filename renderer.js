@@ -43,3 +43,7 @@ function show() {
     console.log("timeout callback")
     ipcRenderer.invoke('my-action2', "show")
 }
+
+function show_transparent() {
+    ipcRenderer.invoke('show-transparent')
+}
