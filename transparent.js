@@ -1,6 +1,5 @@
 
 
-const electron = require('electron');
 const {ipcRenderer} = require('electron')
 
 const hRule = document.getElementById("h-rule");
@@ -10,10 +9,12 @@ var is_selecting = false;
 var startPoint;
 var endPoint;
 
+// MOUSE MOVE, draw the selection rectangle
 document.addEventListener("mousemove", (e) => {
     calc_selected_region(e)
 });
 
+// Calc and draw the rectangle
 function calc_selected_region(e) {
     hRule.style.top = `${e.pageY}px`;
     vRule.style.left = `${e.pageX}px`;
@@ -34,10 +35,8 @@ function calc_selected_region(e) {
     }
 }
 
-function num(n) {
-    return parseInt(n, 10);
-}
 
+// MOUSE DOWN, start selecting, start drawing rect
 document.addEventListener("mousedown",
     (e) => {
         e.preventDefault();
@@ -57,17 +56,25 @@ document.addEventListener("mousedown",
 
     });
 
+// MOUSE UP, end selection
 document.addEventListener("mouseup", (e) => {
     e.preventDefault();
 
     console.log('selected', region.style.top, region.style.left, region.style.width, region.style.height)
 
+    // tell main.js what our selection is.
     ipcRenderer.invoke('selected', num(region.style.top), num(region.style.left), num(region.style.width), num(region.style.height))
 
+    // The following doesn't actually matter because main.js is going to close this window.
+    // but just in case, here's how to get back to an initial state.
     // Reset
     is_selecting = false;
-
     region.style.width = "0px";
     region.style.height = "0px";
     region.style.display = "none";
 });
+
+// strip off "px"
+function num(n) {
+    return parseInt(n, 10);
+}

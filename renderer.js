@@ -16,8 +16,12 @@ function show_notification() {
     }
 }
 
-function show_transparent() {
-    ipcRenderer.invoke('show-transparent')
+function capture_region() {
+    ipcRenderer.invoke('start-capture-region')
+}
+
+function capture_entire_screen() {
+    alert("not implemented")
 }
 
 function capture() {

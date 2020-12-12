@@ -30,8 +30,6 @@ function createTransparentWindow() {
     transparent_win = new BrowserWindow({
         frame: false,
         fullScreen: true,
-        xwidth: 600,
-        xheight: 400,
         transparent: true,
         webPreferences: {
             nodeIntegration: true
@@ -63,21 +61,22 @@ app.on('activate', () => {
 // end boiler plate
 
 
-ipcMain.handle('show-transparent', (event, arg) => {
-    createTransparentWindow()
+ipcMain.handle('start-capture-region', (event, arg) => {
+    main_win.hide()
+    setTimeout(createTransparentWindow(), 100)
+
 })
 
 var selection_size
 ipcMain.handle('selected', (event, top, left, width, height) => {
 
     console.log("main", top, left, width, height);
-    selection_size = {x: top, y: left, width: width, height: height}
+    selection_size = {x: left, y: top, width: width, height: height}
 
     transparent_win.close()
-    main_win.hide()
 
-    // give a chance for our windows to close
-    setTimeout(capture, 1000)
+    // give a chance for transparent window  to close
+    setTimeout(capture, 500)
 
 })
 
@@ -89,14 +88,21 @@ function capture() {
 
     desktopCapturer.getSources(options).then(async sources => {
         for (const source of sources) {
+            console.log(source)
+            // We are assuming the first source is the right one
+
+            // crop it
             cropped = source.thumbnail.crop(selection_size)
+
+            // save it
             try {
                 fs.writeFile("MY_SCREENSHOT.PNG", cropped.toPNG(), handle_fs_error)
-
             }
             catch (e) {
                 console.log("Error", e)
             }
+
+
             main_win.show()
             break
         }
@@ -104,26 +110,6 @@ function capture() {
 }
 
 
-
 function handle_fs_error(error) {
     console.log("fs error", error);
 }
-
-/*
-function determineScreenShotSize() {
-    const screenSize = screen.getPrimaryDisplay().workAreaSize
-    const maxDimension = Math.max(screenSize.width, screenSize.height)
-    if (nativeCaptureValue.checked == true) {
-        return {
-            width: maxDimension * window.devicePixelRatio,
-            height: maxDimension * window.devicePixelRatio
-        }
-    } else {
-        return {
-            width: screenSize.width * window.devicePixelRatio,
-            height: screenSize.height * window.devicePixelRatio
-        }
-    }
-}
-*/
-
