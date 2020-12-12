@@ -1,33 +1,37 @@
 const {app, BrowserWindow} = require('electron')
 const electron = require('electron')
 const {ipcMain} = require('electron');
-var win
+const {desktopCapturer} = require('electron')
 
+var main_win
+var transparent_win
+
+// Otherwise, transparent window won't be transparent
 app.commandLine.appendSwitch('enable-transparent-visuals');
 app.commandLine.appendSwitch('disable-gpu');
 
 
 function createWindow() {
     console.log("inside createWindow")
-    win = new BrowserWindow({
-        width: 800,
-        height: 600,
+    main_win = new BrowserWindow({
+        width: 300,
+        height: 300,
         alwaysOnTop: false, // not needed
         webPreferences: {
             nodeIntegration: true
         }
     })
 
-    win.loadFile('index.html')
+    main_win.loadFile('index.html')
 
 }
 
 function createTransparentWindow() {
-    const win = new BrowserWindow({
+    transparent_win = new BrowserWindow({
         frame: false,
-        width: 400,
-        height: 400,
-        // fullScreen: true,
+        fullScreen: true,
+        xwidth: 600,
+        xheight: 400,
         transparent: true,
         webPreferences: {
             nodeIntegration: true
@@ -35,10 +39,11 @@ function createTransparentWindow() {
         }
     })
 
-    win.loadFile('transparent.html')
-    // win.setFullScreen(true);
+    transparent_win.loadFile('transparent.html')
+    transparent_win.setFullScreen(true);
 }
 
+// boiler plate
 app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
@@ -53,29 +58,18 @@ app.on('activate', () => {
         createWindow()
         init()
     }
-
 })
 
-ipcMain.handle('my-action', (event, arg) => {
-    console.log("corey 1", arg)
-})
+// end boiler plate
+
 
 ipcMain.handle('show-transparent', (event, arg) => {
     createTransparentWindow()
 })
 
+ipcMain.handle('selected', (event, top, left, width, height) => {
 
-ipcMain.handle('my-action2', (event, arg) => {
-    console.log("corey 2", arg)
-
-    if (arg == "hide") {
-        win.hide();
-    }
-    else if (arg == "show") {
-        win.show();
-        //win.focus(); // not needed
-    }
-
+    console.log("main", top, left, width, height);
+    transparent_win.close()
 })
 
-///--enable-transparent-visuals --disable-gpu 

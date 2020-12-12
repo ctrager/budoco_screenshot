@@ -4,67 +4,50 @@
 <head style="min-width: 100vw; min-height: vh;">
     <meta charset="utf-8">
     <title>Electron App</title>
+    <style>
+        #h-rule {
+            height: 0;
+            border-top: 1px dashed red;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+
+        }
+
+        #v-rule {
+            width: 0;
+            border-left:
+                1px dashed red;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        #region {
+            display: none;
+            width: 0;
+            border: 3px dashed red;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
 </head>
 
-<body style="min-width: 100vw; xmin-height: vh;">
+<body style="min-width: 100vw; min-height: vh;">
     <div>hello</div>
 
-    <div id="h-rule" style="height: 0; border-top: 1px dashed red; position: fixed; top: 0; left: 0; right: 0;"></div>
-    <div id="v-rule" style="width: 0; border-left: 1px dashed red; position: fixed; top: 0; bottom: 0; left: 0;"></div>
-    <div id="region"
-        style="display: none; width: 0; border: 1px dashed red; position: fixed; top: 0; bottom: 0; left: 0; right: 0;">
+    <div id="h-rule"></div>
+    <div id="v-rule"></div>
+    <div id="region">
     </div>
 
-    <script>
-        const hRule = document.getElementById("h-rule");
-        const vRule = document.getElementById("v-rule");
-        const region = document.getElementById("region");
-        var selection = false;
-        var startPoint;
-        var endPoint;
+    <script src="transparent.js"></script>
 
-        document.addEventListener("mousemove", (e) => {
-            hRule.style.top = `${e.pageY}px`;
-            vRule.style.left = `${e.pageX}px`;
-
-            if (selection) {
-                endPoint = {
-                    pageX: e.pageX,
-                    pageY: e.pageY
-                };
-
-                if (endPoint.pageX - startPoint.pageX < 0) {
-                    [startPoint.pageX, endPoint.pageX] = [endPoint.pageX,
-                    startPoint.pageX];
-                } if (endPoint.pageY - startPoint.pageY < 0) {
-                    [startPoint.pageY,
-                    endPoint.pageY] = [endPoint.pageY, startPoint.pageY];
-                } region.style.top = `${startPoint.pageY}px`;
-                region.style.left = `${startPoint.pageX}px`; region.style.width = `${endPoint.pageX - startPoint.pageX}px`;
-                region.style.height = `${endPoint.pageY - startPoint.pageY}px`;
-            }
-        }); document.addEventListener("mousedown",
-            (e) => {
-                e.preventDefault();
-
-                selection = true;
-
-                startPoint = {
-                    pageX: e.pageX,
-                    pageY: e.pageY
-                };
-
-                region.style.display = "block";
-            });
-
-        document.addEventListener("mouseup", (e) => {
-            e.preventDefault();
-
-            selection = false;
-
-            region.style.display = "none";
-        });
-    </script>
 </body>
 
 </html>
