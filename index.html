@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+</head>
+
+<body style="background: white;">
+    <h1>Hello World!</h1>
+    <p>
+        We are using node
+        <script>document.write(process.versions.node)</script>,
+        Chrome
+        <script>document.write(process.versions.chrome)</script>,
+        and Electron
+        <script>document.write(process.versions.electron)</script>.
+    </p>
+    <button onclick="show_notification()">show_notification</button>
+    <br>
+    <button onclick="talk_to_main()">talk_to_main</button>
+    <br>
+    <button onclick="start_timer()">start_timer</button>
+    <br>
+    <button onclick="hide()">hide</button>
+
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
