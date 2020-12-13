@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <title>Electron App</title>
     <style>
+        body {
+            min-width: 100vw;
+            min-height: vh;
+            /* @Ivangrek says this is needed on his machine, but doesn't help/hurt on my Mint 20 */
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
         #h-rule {
             height: 0;
             border-top: 1px dashed red;
@@ -38,7 +45,7 @@
     </style>
 </head>
 
-<body style="min-width: 100vw; min-height: vh;">
+<body>
     <div>hello</div>
 
     <div id="h-rule"></div>
