@@ -14,8 +14,8 @@ app.commandLine.appendSwitch('disable-gpu');
 function createWindow() {
     console.log("inside createWindow")
     main_win = new BrowserWindow({
-        width: 300,
-        height: 300,
+        width: 900,
+        height: 600,
         alwaysOnTop: false, // not needed
         webPreferences: {
             nodeIntegration: true
@@ -63,8 +63,7 @@ app.on('activate', () => {
 
 ipcMain.handle('start-capture-region', (event, arg) => {
     main_win.hide()
-    setTimeout(createTransparentWindow(), 100)
-
+    setTimeout(createTransparentWindow, 100)
 })
 
 var selection_size
@@ -102,6 +101,7 @@ function capture() {
                 console.log("Error", e)
             }
 
+            main_win.webContents.send('img', cropped.toDataURL());
 
             main_win.show()
             break

@@ -24,12 +24,78 @@ function capture_entire_screen() {
     alert("not implemented")
 }
 
-function capture() {
+ipcRenderer.on('img', (event, data_url) => {
+    // put image in img tag
+    img_el = document.getElementById("img")
+    img_el.src = data_url
 
-    desktopCapturer.getSources({types: ['screen']}).then(async sources => {
-        for (const source of sources) {
-            console.log(source)
+    // put image in form too
+    document.getElementById("image_data").value = data_url
+
+    // show
+    img.style.display = "block"
+    document.getElementById("submit_button").style.display = "block"
+
+})
+
+function submit_form() {
+    var url = document.getElementById("url").value
+    var username = document.getElementById("username").value
+    var password = document.getElementById("password").value
+    var description = document.getElementById("description").value
+    var image_data = document.getElementById("image_data").value
+
+    if (url == "") {
+        alert("url is required")
+        return
+    }
+    if (username == "") {
+        alert("username is required")
+        return
+    }
+    if (password == "") {
+        alert("password is required")
+        return
+    }
+    if (description == "") {
+        alert("description is required")
+        return
+    }
+
+    var params = "username=" + encodeURIComponent(username)
+        + "&password=" + encodeURIComponent(password)
+        + "&description=" + encodeURIComponent(description)
+        + "&image_data=" + encodeURIComponent(image_data)
+
+    ajaxPost(url, params, description);
+
+}
+
+
+function ajaxPost(url, params, description) {
+
+    var http = new XMLHttpRequest();
+
+    http.open('POST', url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    http.onreadystatechange = function () {
+        console.log("onreadystatechange", http.readyState, http.status);
+        console.log(http.readyState)
+        console.log(http.status)
+
+        if (http.readyState == 4) {
+            if (http.status == 200) {
+                console.log(http.status)
+                alert("success\n" + http.response)
+            }
+            else {
+                console.log(http.response)
+                alert("failure\n" + http.status)
+            }
         }
     }
-    )
+    http.send(params);
 }

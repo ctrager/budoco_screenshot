@@ -10,9 +10,42 @@
             background-color: #eeeeee;
         }
 
+        body,
+        button,
+        label input {
+            font-family: Arial, sans-serif
+        }
+
         button {
             font-size: 20px;
             color: blue;
+        }
+
+        label {
+            display: inline-block;
+            width: 110px;
+            margin-right: 5px;
+
+        }
+
+        div {
+            margin-top: 20px;
+        }
+
+        input {
+            font-size: 20px;
+            width: 320px;
+        }
+
+        #description {
+
+            width: 600px;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 800px;
+            border: 3px solid red;
         }
     </style>
 </head>
@@ -20,8 +53,28 @@
 <body style="background: white;">
     <h1>Budoco Screenshot</h1>
 
-    <button onclick="capture_entire_screen()">Capture Entire Screen</button>
-    <button onclick="capture_region()">Capture Region</button>
+
+    <button onclick="capture_region()">Select Rectangle to Screen Capture</button>
+
+    <form id="image_form" method="post" action="">
+
+        <div>try also https://budoco.net/CreateIssue</div>
+
+        <div><label>Budoco URL</label><input name="url" id="url" value="http://localhost:5000/CreateIssue" /></div>
+
+        <div><label>Username</label><input name="username" id="username" value="admin"></div>
+
+        <div><label>Password</label> <input type="password" name="password" id="password" value="x" /></div>
+
+        <div><label>Description</label><input maxlength="200" name="description" id="description" value=""></div>
+
+        <div><button type="button" onclick="submit_form()" style="display: none;" id="submit_button">Submit</button>
+        </div>
+
+        <input id="image_data" name="image_data" type="hidden" value="" />
+
+        <img style="display: none;" id="img" src="">
+    </form>
 
     <script src="renderer.js"></script>
 </body>
