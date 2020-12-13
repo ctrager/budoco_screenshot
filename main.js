@@ -50,7 +50,6 @@ app.on('window-all-closed', () => {
     }
 })
 
-
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow()
@@ -61,11 +60,15 @@ app.on('activate', () => {
 // end boiler plate
 
 
+// rederer.js telling us to launch transparent window
 ipcMain.handle('start-capture-region', (event, arg) => {
     main_win.hide()
+    // doing it async to give our window a chance to hide, because
+    // we don't want it to be part of the captured image
     setTimeout(createTransparentWindow, 100)
 })
 
+// this is the transparent window giving us what was selected
 var selection_size
 ipcMain.handle('selected', (event, top, left, width, height) => {
 
@@ -79,6 +82,7 @@ ipcMain.handle('selected', (event, top, left, width, height) => {
 
 })
 
+// capture the screen and use the selected area to crop what we capture
 function capture() {
     var screen_size = screen.getPrimaryDisplay().workAreaSize
     console.log("screen size", screen_size)
@@ -93,7 +97,7 @@ function capture() {
             // crop it
             cropped = source.thumbnail.crop(selection_size)
 
-            // save it
+            // save it, just for fun
             try {
                 fs.writeFile("MY_SCREENSHOT.PNG", cropped.toPNG(), handle_fs_error)
             }
@@ -101,6 +105,7 @@ function capture() {
                 console.log("Error", e)
             }
 
+            // Pass the image to renderer.js to display
             main_win.webContents.send('img', cropped.toDataURL());
 
             main_win.show()

@@ -1,9 +1,7 @@
 
-const electron = require('electron');
 const {ipcRenderer} = require('electron')
-const {desktopCapturer} = require('electron')
 
-
+/*
 var myNotification
 
 function show_notification() {
@@ -15,7 +13,9 @@ function show_notification() {
         console.log('Notification clicked')
     }
 }
+*/
 
+// Tell main.js to launch the transparent.html, to select a region.
 function capture_region() {
     ipcRenderer.invoke('start-capture-region')
 }
@@ -24,6 +24,7 @@ function capture_entire_screen() {
     alert("not implemented")
 }
 
+// Receive the image from main.js
 ipcRenderer.on('img', (event, data_url) => {
     // put image in img tag
     img_el = document.getElementById("img")
@@ -38,6 +39,7 @@ ipcRenderer.on('img', (event, data_url) => {
 
 })
 
+// user hit button to submit to budoco
 function submit_form() {
     var url = document.getElementById("url").value
     var username = document.getElementById("username").value
@@ -71,7 +73,7 @@ function submit_form() {
 
 }
 
-
+// post to budoco
 function ajaxPost(url, params, description) {
 
     var http = new XMLHttpRequest();
