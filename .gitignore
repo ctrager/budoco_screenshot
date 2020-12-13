@@ -1,5 +1,7 @@
-# Logs
+# the output of the screenshot
 MY_SCREENSHOT.PNG
+
+# Logs
 logs
 *.log
 npm-debug.log*
