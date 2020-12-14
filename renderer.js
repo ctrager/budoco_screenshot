@@ -1,5 +1,8 @@
 
 const {ipcRenderer} = require('electron')
+const fs = require('fs');
+const {url} = require('inspector');
+
 
 /*
 var myNotification
@@ -112,3 +115,42 @@ function handle_entire_or_region(el) {
 
     }
 }
+
+const CONFIG_FILE_NAME = "budoco_screenshot_config.txt"
+
+function on_load() {
+    if (fs.existsSync(CONFIG_FILE_NAME)) {
+        try {
+            var text = fs.readFileSync(CONFIG_FILE_NAME);
+            config = JSON.parse(text)
+            document.getElementById("url").value = config.url
+            document.getElementById("username").value = config.username
+            document.getElementById("password").value = config.password
+
+        } catch (e) {
+            console.log('Error:', e);
+        }
+    }
+}
+
+function save_configuration() {
+    var url = document.getElementById("url").value
+    var username = document.getElementById("username").value
+    var password = ""
+
+    if (document.getElementById("save_password").checked) {
+        password = document.getElementById("password").value
+    }
+
+    config =
+    {
+        url: url,
+        username: username,
+        password: password
+    }
+
+    // save it, just for fun
+    fs.writeFileSync(CONFIG_FILE_NAME, JSON.stringify(config))
+
+}
+

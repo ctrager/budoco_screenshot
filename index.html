@@ -9,7 +9,7 @@
     <link rel="StyleSheet" href="index.css" type="text/css">
 </head>
 
-<body style="background: white;">
+<body style="background: white;" onload="on_load()">
     <div class="steps_container">
 
         <div class="steps123 step1">
@@ -65,7 +65,7 @@
                         <br>If you save your password, it saves it plain clear text, not encrypted.
                     </div>
                     <div class="button_div">
-                        <button disabled onclick="capture()">Save Configuration</button>
+                        <button onclick="save_configuration()">Save Configuration</button>
                         <label><input type="checkbox" id="save_password" />Save password also?</label>
                     </div>
                 </div>

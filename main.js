@@ -1,6 +1,4 @@
-const {app, BrowserWindow, screen} = require('electron')
-const {ipcMain} = require('electron');
-const {desktopCapturer} = require('electron')
+const {app, BrowserWindow, screen, ipcMain, desktopCapturer} = require('electron')
 const fs = require('fs');
 
 var main_win
@@ -128,14 +126,6 @@ function capture(entire_or_region) {
                 img = source.thumbnail
             }
 
-            // // save it, just for fun
-            // try {
-            //     fs.writeFile("MY_SCREENSHOT.PNG", img, handle_fs_error)
-            // }
-            // catch (e) {
-            //     console.log("Error", e)
-            // }
-
             // Pass the image to renderer.js to display
             main_win.webContents.send('img', img.toDataURL());
 
@@ -148,11 +138,6 @@ function capture(entire_or_region) {
     // catch (e) {
     //     alert(e)
     // }
-}
-
-
-function handle_fs_error(error) {
-    console.log("fs error", error);
 }
 
 
