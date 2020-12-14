@@ -31,7 +31,7 @@
 
         .button_div {
             margin-top: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-align: center;
             white-space: nowrap;
         }
@@ -40,12 +40,6 @@
             display: inline-block;
             margin: 0px;
         }
-
-        div {
-            xmargin-top: 20px;
-        }
-
-        input {}
 
         #description {}
 
@@ -58,18 +52,15 @@
         }
 
         .image_container {
-
             display: grid;
-
             justify-content: center;
-
         }
 
         .image_frame {
 
             grid-column-start: 1;
             width: 960px;
-            height: 300px;
+            height: 370px;
             xbackground-color: lightyellow;
             border: 2px dashed gray;
 
@@ -77,11 +68,8 @@
 
         .steps_container {
             display: grid;
-            xgrid-template-columns: 250px 500px 100px;
-            margin: 10px;
-            margin-bottom: 30px;
             justify-content: center;
-
+            margin-bottom: 10px;
 
         }
 
@@ -90,13 +78,11 @@
             margin-left: 20px;
             margin-right: 20px;
 
-            padding: 10px;
             border: 1px solid gray;
             background-color: #f0fff0;
             border-radius: 10px;
-            padding: 12px;
-
-
+            padding-left: 12px;
+            padding-right: 12px;
         }
 
         .steps123>div>div {
@@ -149,6 +135,19 @@
             font-size: 12px;
             color: #0a0;
 
+        }
+
+        #description_div {
+            margin-bottom: 10px;
+        }
+
+        #description_label {
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        #description {
+            width: 800px;
         }
     </style>
 </head>
@@ -228,7 +227,10 @@
 
 
     <div class="image_container">
-        <div><label>Description</label><input maxlength="200" id="description" value=""></div>
+        <div id="description_div">
+            <label id="description_label">Description</label>
+            <input maxlength="200" placeholder="My Budoco Screenshot" id="description" value="">
+        </div>
 
         <div class="image_frame">
             <img class="display_image" style="display: none;" id="img" src="">

@@ -45,19 +45,19 @@ function submit_form() {
     var image_data = document.getElementById("image_data").value
 
     if (url == "") {
-        alert("url is required")
+        alert("URL is required")
         return
     }
     if (username == "") {
-        alert("username is required")
+        alert("Username is required")
         return
     }
     if (password == "") {
-        alert("password is required")
+        alert("Password is required")
         return
     }
     if (description == "") {
-        alert("description is required")
+        alert("Description is required")
         return
     }
 

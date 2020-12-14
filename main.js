@@ -15,7 +15,7 @@ function createWindow() {
     console.log("inside createWindow")
     main_win = new BrowserWindow({
         width: 1000,
-        height: 650,
+        height: 680,
         alwaysOnTop: false, // not needed
         webPreferences: {
             nodeIntegration: true
