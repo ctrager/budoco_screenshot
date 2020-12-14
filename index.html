@@ -7,76 +7,239 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <style>
         body {
-            background-color: #eeeeee;
+            background-color: lightgray;
         }
 
         body,
         button,
         label input {
-            font-family: Arial, sans-serif
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        input {
+            padding: 2px;
+
         }
 
         button {
-            font-size: 20px;
+            font-size: 14px;
             color: blue;
+            padding: 5px;
+            white-space: nowrap;
+        }
+
+        .button_div {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-align: center;
+            white-space: nowrap;
         }
 
         label {
             display: inline-block;
-            width: 110px;
-            margin-right: 5px;
-
+            margin: 0px;
         }
 
         div {
-            margin-top: 20px;
+            xmargin-top: 20px;
         }
 
-        input {
-            font-size: 20px;
-            width: 320px;
-        }
+        input {}
 
-        #description {
+        #description {}
 
-            width: 600px;
-        }
-
-        img {
-            margin-top: 20px;
-            max-width: 800px;
+        .display_image {
+            display: inline-block;
+            max-width: 960px;
+            max-height: 400px;
             border: 3px solid red;
+            text-align: center;
+        }
+
+        .image_container {
+
+            display: grid;
+
+            justify-content: center;
+
+        }
+
+        .image_frame {
+
+            grid-column-start: 1;
+            width: 960px;
+            height: 300px;
+            xbackground-color: lightyellow;
+            border: 2px dashed gray;
+
+        }
+
+        .steps_container {
+            display: grid;
+            xgrid-template-columns: 250px 500px 100px;
+            margin: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+
+
+        }
+
+
+        .steps123>div {
+            margin-left: 20px;
+            margin-right: 20px;
+
+            padding: 10px;
+            border: 1px solid gray;
+            background-color: #f0fff0;
+            border-radius: 10px;
+            padding: 12px;
+
+
+        }
+
+        .steps123>div>div {
+            margin-bottom: 8px;
+        }
+
+
+        .big_number {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            color: #0c0;
+            margin-bottom: 5px;
+            white-space: nowrap;
+        }
+
+        .step1 {
+            grid-column-start: 1;
+        }
+
+        .step2 {
+            grid-column-start: 2;
+
+        }
+
+        .step2>div>div>label {
+            width: 90px;
+        }
+
+        .step3 {
+            grid-column-start: 3;
+        }
+
+
+        #delay_label {
+            margin-top: 5px;
+            margin-left: 40px;
+        }
+
+        #delay_input {
+            width: 40px;
+        }
+
+        #url {
+            width: 300px;
+        }
+
+        .info {
+            text-align: left;
+            font-size: 12px;
+            color: #0a0;
+
         }
     </style>
 </head>
 
 <body style="background: white;">
-    <h1>Budoco Screenshot</h1>
+    <div class="steps_container">
 
+        <div class="steps123 step1">
+            <div>
+                <div class="big_number">1 - Capture Screen</div>
 
-    <button onclick="capture_region()">Select Rectangle to Screen Capture</button>
+                <div>
+                    <label>
+                        <input type="radio" name="all_or_region" value="all" checked>Capture selected region</a>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input disabled type="radio" name="all_or_region" value="all">Capture entire screen</a>
+                    </label>
+                    <div>
+                        <label id="delay_label">Delay (seconds)</label>
+                        <input id="delay_input" type="number" value="0" />
+                    </div>
+                </div>
 
-    <form id="image_form" method="post" action="">
+                <div class="button_div">
+                    <button onclick="capture()">Capture</button>
+                </div>
+            </div>
 
-        <div>try also https://budoco.net/CreateIssue</div>
+        </div>
+        <!--end 1-->
 
-        <div><label>Budoco URL</label><input name="url" id="url" value="http://localhost:5000/CreateIssue" /></div>
+        <div class="steps123 step2">
+            <div>
+                <div class="big_number">2 - Configure</div>
 
-        <div><label>Username</label><input name="username" id="username" value="admin"></div>
+                <div>
+                    <label>Budoco URL</label><input id="url" value="https://budoco.net/CreateIssue" />
+                </div>
 
-        <div><label>Password</label> <input type="password" name="password" id="password" value="admin" /></div>
+                <div>
+                    <label>Username</label><input maxlength="30" id="username" value="admin">
+                </div>
 
-        <div><label>Description</label><input maxlength="200" name="description" id="description" value=""></div>
+                <div>
+                    <label>Password</label><input maxlength="30" type="password" id="password" value="admin" />
+                </div>
 
-        <div><button type="button" onclick="submit_form()" style="display: none;" id="submit_button">Submit</button>
+                <div class="button_div">
+                    <div class="info">You can save your configuration for convenience, but it's not required.
+                        <br>If you save your password, it saves it plain clear text, not encrypted.
+                    </div>
+                    <div class="button_div">
+                        <button disabled onclick="capture()">Save Configuration</button>
+                        <label><input type="checkbox" id="save_password" />Save password also?</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end 2-->
+
+        <div class="steps123 step3">
+            <div>
+                <div class="big_number">3 - Send</div>
+
+                <div class="button_div">
+                    <button type="button" onclick="submit_form()" id="submit_button">Send to Budoco</button>
+                </div>
+            </div>
         </div>
 
-        <input id="image_data" name="image_data" type="hidden" value="" />
+    </div>
+    <!--end 123 container-->
 
-        <img style="display: none;" id="img" src="">
-    </form>
+
+
+    <div class="image_container">
+        <div><label>Description</label><input maxlength="200" id="description" value=""></div>
+
+        <div class="image_frame">
+            <img class="display_image" style="display: none;" id="img" src="">
+        </div>
+    </div>
+
+    <input id="image_data" type="hidden" value="" />
+
 
     <script src="renderer.js"></script>
+
 </body>
 
 </html>

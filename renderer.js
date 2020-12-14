@@ -16,13 +16,10 @@ function show_notification() {
 */
 
 // Tell main.js to launch the transparent.html, to select a region.
-function capture_region() {
+function capture() {
     ipcRenderer.invoke('start-capture-region')
 }
 
-function capture_entire_screen() {
-    alert("not implemented")
-}
 
 // Receive the image from main.js
 ipcRenderer.on('img', (event, data_url) => {

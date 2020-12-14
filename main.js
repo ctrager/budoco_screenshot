@@ -14,8 +14,8 @@ app.commandLine.appendSwitch('disable-gpu');
 function createWindow() {
     console.log("inside createWindow")
     main_win = new BrowserWindow({
-        width: 900,
-        height: 600,
+        width: 1000,
+        height: 650,
         alwaysOnTop: false, // not needed
         webPreferences: {
             nodeIntegration: true
@@ -39,6 +39,7 @@ function createTransparentWindow() {
 
     transparent_win.loadFile('transparent.html')
     transparent_win.setFullScreen(true);
+
 }
 
 // boiler plate
@@ -118,3 +119,16 @@ function capture() {
 function handle_fs_error(error) {
     console.log("fs error", error);
 }
+
+
+// // experiment with handling the selection window losing focus
+// app.on('browser-window-blur', (event, win) => {
+//     if (win == transparent_win) {
+//         console.log("transparent_win");
+//     }
+//     if (win.webContents.isDevToolsFocused()) {
+//         console.log('Ignore this case')
+//     } else {
+//         console.log('browser-window-blur', win.webContents.id)
+//     }
+// })
