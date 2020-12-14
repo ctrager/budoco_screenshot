@@ -17,7 +17,9 @@ function show_notification() {
 
 // Tell main.js to launch the transparent.html, to select a region.
 function capture() {
-    ipcRenderer.invoke('start-capture-region')
+    entire_or_region = document.getElementById("entire").checked ? "entire" : "region"
+    delay = document.getElementById("delay_input").value
+    ipcRenderer.invoke('start-capture', entire_or_region, delay)
 }
 
 
@@ -97,4 +99,16 @@ function ajaxPost(url, params, description) {
         }
     }
     http.send(params);
+}
+
+function handle_entire_or_region(el) {
+    if (el.value == "entire") {
+        document.getElementById("delay_label").className = ""
+        document.getElementById("delay_input").disabled = false;
+    }
+    else {
+        document.getElementById("delay_label").className = "disabled"
+        document.getElementById("delay_input").disabled = true;
+
+    }
 }

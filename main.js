@@ -26,22 +26,6 @@ function createWindow() {
 
 }
 
-function createTransparentWindow() {
-    transparent_win = new BrowserWindow({
-        frame: false,
-        fullScreen: true,
-        transparent: true,
-        webPreferences: {
-            nodeIntegration: true
-
-        }
-    })
-
-    transparent_win.loadFile('transparent.html')
-    transparent_win.setFullScreen(true);
-
-}
-
 // boiler plate
 app.whenReady().then(createWindow)
 
@@ -62,12 +46,49 @@ app.on('activate', () => {
 
 
 // rederer.js telling us to launch transparent window
-ipcMain.handle('start-capture-region', (event, arg) => {
+ipcMain.handle('start-capture', (event, entire_or_region, delay) => {
+    console.log(entire_or_region, delay)
+
     main_win.hide()
+
     // doing it async to give our window a chance to hide, because
     // we don't want it to be part of the captured image
-    setTimeout(createTransparentWindow, 100)
+    // The 600 millisecond delay seems to help give our window time to hide.
+    setTimeout(
+        function () {start_capture(entire_or_region, delay)},
+        600)
 })
+
+function start_capture(entire_or_region, delay) {
+    console.log(entire_or_region, delay)
+
+    if (entire_or_region == "region") {
+        createTransparentWindow()
+    }
+    else {
+        // entire
+        milliseconds = delay * 1000
+        setTimeout(function () {capture("entire")}, milliseconds)
+    }
+}
+
+
+function createTransparentWindow() {
+    transparent_win = new BrowserWindow({
+        frame: false,
+        fullScreen: true,
+        transparent: true,
+        webPreferences: {
+            nodeIntegration: true
+
+        }
+    })
+
+    transparent_win.loadFile('transparent.html')
+    transparent_win.setFullScreen(true);
+
+}
+
 
 // this is the transparent window giving us what was selected
 var selection_size
@@ -75,44 +96,58 @@ ipcMain.handle('selected', (event, top, left, width, height) => {
 
     console.log("main", top, left, width, height);
     selection_size = {x: left, y: top, width: width, height: height}
+    console.log("selection size", selection_size);
 
     transparent_win.close()
 
     // give a chance for transparent window  to close
-    setTimeout(capture, 500)
+    setTimeout(function () {capture("region")}, 500)
 
 })
 
 // capture the screen and use the selected area to crop what we capture
-function capture() {
+function capture(entire_or_region) {
+
     var screen_size = screen.getPrimaryDisplay().workAreaSize
     console.log("screen size", screen_size)
-    console.log("selection size", selection_size);
     var options = {types: ['screen'], thumbnailSize: screen_size}
+    var img
 
+    //try {
     desktopCapturer.getSources(options).then(async sources => {
         for (const source of sources) {
+
             console.log(source)
             // We are assuming the first source is the right one
 
             // crop it
-            cropped = source.thumbnail.crop(selection_size)
+            if (entire_or_region == "region") {
+                img = source.thumbnail.crop(selection_size)
+            }
+            else {
+                img = source.thumbnail
+            }
 
-            // save it, just for fun
-            try {
-                fs.writeFile("MY_SCREENSHOT.PNG", cropped.toPNG(), handle_fs_error)
-            }
-            catch (e) {
-                console.log("Error", e)
-            }
+            // // save it, just for fun
+            // try {
+            //     fs.writeFile("MY_SCREENSHOT.PNG", img, handle_fs_error)
+            // }
+            // catch (e) {
+            //     console.log("Error", e)
+            // }
 
             // Pass the image to renderer.js to display
-            main_win.webContents.send('img', cropped.toDataURL());
+            main_win.webContents.send('img', img.toDataURL());
 
             main_win.show()
             break
         }
-    })
+    }).catch(function (e) {console.log(e)})
+
+    //}
+    // catch (e) {
+    //     alert(e)
+    // }
 }
 
 
