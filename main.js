@@ -84,6 +84,7 @@ function createTransparentWindow() {
 
     transparent_win.loadFile('transparent.html')
     transparent_win.setFullScreen(true);
+    transparent_win.setResizable(false);
 
 }
 
@@ -126,18 +127,54 @@ function capture(entire_or_region) {
                 img = source.thumbnail
             }
 
+            width = img.getSize().width
+            height = img.getSize().height
+
+            console.log("ORIGINAL SIZE", width, height)
+
+            // resize, keep aspect ratio
+            width_factor = 1
+            height_factor = 1
+
+            if (width > 960) {
+                width_factor = 960 / width
+            }
+            if (height > 420) {
+                height_factor = 420 / height
+            }
+
+            console.log("FACTORS", width_factor, height_factor)
+
+            if (width_factor != 1 || height_factor != 1) {
+
+                if (width_factor < height_factor) {
+                    img = img.resize({
+                        width: Math.floor(width * width_factor),
+                        height: Math.floor(height * width_factor)
+                    })
+                }
+                else {
+                    img = img.resize({
+                        width: Math.floor(width * height_factor),
+                        height: Math.floor(height * height_factor)
+                    })
+                }
+            }
+
+            width = img.getSize().width
+            height = img.getSize().height
+            console.log("AFTER SIZE", width, height)
+
+            //fs.writeFileSync("AFTER_RESIZE.png", img.toPNG())
+
             // Pass the image to renderer.js to display
-            main_win.webContents.send('img', img.toDataURL(), img.getSize().width, img.getSize().height);
+            main_win.webContents.send('img', img.toDataURL(), width, height);
 
             main_win.show()
             break
         }
     }).catch(function (e) {console.log(e)})
 
-    //}
-    // catch (e) {
-    //     alert(e)
-    // }
 }
 
 

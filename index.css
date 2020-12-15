@@ -33,55 +33,26 @@ label {
     margin: 0px;
 }
 
-#description {}
-
-
-
 .image_container {
     display: grid;
     justify-content: center;
 }
-/* 
-.image_frame {
 
+.image_frame {
     grid-column-start: 1;
     width: 960px;
-    height: 430px;  /* THIS SHOULD MATCH IMAGE BELOW, PLUS BORDER */
-    border: 2px dashed gray;
-
+    height: 430px; 
+    background: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
-
-.screenshot_img {
-    display: inline-block;
-    max-width: 980px;
-    max-height: 426px; /*  THIS SHOULD MATCH THE FRAME ABOVE MINUS BORDER */
-    border: 3px solid red;
-    text-align: center;
-} */
-
-/
-.image_frame {
-
-    grid-column-start: 1;
-    width: 400px;
-    height: 430px;  /* THIS SHOULD MATCH IMAGE BELOW, PLUS BORDER */
-    border: 2px dashed gray;
-
-}
-
-.screenshot_img {
-    display: inline;
-    max-width: 400px;
-    max-height: 426px; /*  THIS SHOULD MATCH THE FRAME ABOVE MINUS BORDER */
-    border: 3px solid red;
-    text-align: center;
-} 
 
 canvas {
-    display: inline;
-    border: 2px solid red;
-    width: 400px;
-    height: 400px;
+    flex: 0;
+    border: 3px solid red;
+    display: none;
 }
 
 .steps_container {
@@ -90,7 +61,6 @@ canvas {
     margin-bottom: 10px;
 
 }
-
 
 .steps123>div {
     margin-left: 12px;

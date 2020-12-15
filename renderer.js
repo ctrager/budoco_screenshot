@@ -28,26 +28,40 @@ function capture() {
 
 // Receive the image from main.js
 ipcRenderer.on('img', (event, data_url, width, height) => {
+
     // put image in img tag
-    img_el = document.getElementById("img")
-    img_el.src = data_url
+    //img_el = document.getElementById("img")
+    //img_el.src = data_url
 
     // put image in form too
-    document.getElementById("image_data").value = data_url
+    // document.getElementById("image_data").value = data_url
 
     // show
-    img_el.style.display = "block"
-    //document.getElementById("submit_button").style.display = "block"
+    //img_el.style.display = "block"
 
     canvas = document.getElementById("canvas")
-    context = canvas.getContext('2d');
+    context = canvas.getContext('2d')
+    context.clearRect(0, 0, canvas.width, canvas.height)
+
+    // context.imageSmoothingEnabled = false;
     console.log("ww, hh", width, height)
-    var img = new Image();
-    img.src = data_url;
-    img.onload = function () {
+
+    var new_img = new Image();
+    new_img.src = data_url;
+    canvas.width = width;
+    canvas.height = height;
+
+
+    //canvas.prop("width", window.innerWidth)
+    //canvas.prop("height", window.innerHeight);
+    new_img.onload = function () {
         /// draw image to canvas
-        context.drawImage(this, 0, 0);
+
+        context.drawImage(this, 0, 0) //  width, height) // , 0, 0, width, height);
+        canvas.style.display = "inline-block"
+
     }
+    //document.getElementById("image_frame").insertBefore(new_img, null)
 
 })
 
@@ -57,7 +71,7 @@ function submit_form() {
     var username = document.getElementById("username").value
     var password = document.getElementById("password").value
     var description = document.getElementById("description").value
-    var image_data = document.getElementById("image_data").value
+    var image_data = document.getElementById("canvas").toDataURL()
 
     if (url == "") {
         alert("URL is required")
@@ -81,6 +95,7 @@ function submit_form() {
         alert("Description is required")
         return
     }
+
 
     var params = "username=" + encodeURIComponent(username)
         + "&password=" + encodeURIComponent(password)
@@ -157,7 +172,7 @@ function on_load() {
         }
     }
 
-    ipcRenderer.invoke('start-capture', "entire", 0)
+    //ipcRenderer.invoke('start-capture', "entire", 0)
 
 }
 
