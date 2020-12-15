@@ -7,7 +7,9 @@
 ## About
 A screenshot app especially tailored for posting screenshots to the [Budoco](https://github.com/ctrager/budoco) issue tracker
 
-Written using election
+Built using [Electron](https://www.electronjs.org).
+
+You can try it with the [Budoco Demo](https://budoco.net).
 
 ![screenshot](/budoco_screenshot_for_readme.png)
 
