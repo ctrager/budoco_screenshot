@@ -127,7 +127,7 @@ function capture(entire_or_region) {
             }
 
             // Pass the image to renderer.js to display
-            main_win.webContents.send('img', img.toDataURL());
+            main_win.webContents.send('img', img.toDataURL(), img.getSize().width, img.getSize().height);
 
             main_win.show()
             break

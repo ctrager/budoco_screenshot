@@ -27,7 +27,7 @@ function capture() {
 
 
 // Receive the image from main.js
-ipcRenderer.on('img', (event, data_url) => {
+ipcRenderer.on('img', (event, data_url, width, height) => {
     // put image in img tag
     img_el = document.getElementById("img")
     img_el.src = data_url
@@ -36,8 +36,18 @@ ipcRenderer.on('img', (event, data_url) => {
     document.getElementById("image_data").value = data_url
 
     // show
-    img.style.display = "block"
-    document.getElementById("submit_button").style.display = "block"
+    img_el.style.display = "block"
+    //document.getElementById("submit_button").style.display = "block"
+
+    canvas = document.getElementById("canvas")
+    context = canvas.getContext('2d');
+    console.log("ww, hh", width, height)
+    var img = new Image();
+    img.src = data_url;
+    img.onload = function () {
+        /// draw image to canvas
+        context.drawImage(this, 0, 0);
+    }
 
 })
 
@@ -146,6 +156,9 @@ function on_load() {
             console.log('Error:', e);
         }
     }
+
+    ipcRenderer.invoke('start-capture', "entire", 0)
+
 }
 
 function save_configuration() {
