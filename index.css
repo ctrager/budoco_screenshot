@@ -35,13 +35,7 @@ label {
 
 #description {}
 
-.display_image {
-    display: inline-block;
-    max-width: 960px;
-    max-height: 400px;
-    border: 3px solid red;
-    text-align: center;
-}
+
 
 .image_container {
     display: grid;
@@ -52,10 +46,17 @@ label {
 
     grid-column-start: 1;
     width: 960px;
-    height: 370px;
-    xbackground-color: lightyellow;
+    height: 430px;  /* THIS SHOULD MATCH IMAGE BELOW, PLUS BORDER */
     border: 2px dashed gray;
 
+}
+
+.screenshot_img {
+    display: inline-block;
+    max-width: 980px;
+    max-height: 426px; /*  THIS SHOULD MATCH THE FRAME ABOVE MINUS BORDER */
+    border: 3px solid red;
+    text-align: center;
 }
 
 .steps_container {
@@ -67,8 +68,8 @@ label {
 
 
 .steps123>div {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 12px;
+    margin-right: 12px;
 
     border: 1px solid gray;
     background-color: #f0fff0;
@@ -126,22 +127,17 @@ color: gray;
     width: 300px;
 }
 
-.info {
-    text-align: left;
-    font-size: 12px;
-    color: #0a0;
-
-}
-
 #description_div {
     margin-bottom: 10px;
 }
 
-#description_label {
-    margin-right: 5px;
-    font-weight: bold;
+#description {
+    font-family: "Lucida Console", monospace;
+    width: 320px;
+    height: 80px;
 }
 
-#description {
-    width: 800px;
-}
+/*
+200 chars of text for testing
+aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb 222222222 bbbbbbbbb 222222222 bbbbbbbbb 222222222 bbbbbbbbb 222222222 bbbbbbbbb 222222222 zzzzzzzzz
+*/

@@ -61,6 +61,12 @@ function submit_form() {
         alert("Password is required")
         return
     }
+
+    if (image_data == "") {
+        alert("You don't seem to have taken a screenshot yet")
+        return
+    }
+
     if (description == "") {
         alert("Description is required")
         return
@@ -134,11 +140,19 @@ function on_load() {
 }
 
 function save_configuration() {
+
+    save_password = document.getElementById("save_password").checked
+    if (save_password) {
+        if (!confirm("Your password will be saved in a file unencrypted.\n" +
+            "Are you sure you want to save your password?")) {
+            return
+        }
+    }
     var url = document.getElementById("url").value
     var username = document.getElementById("username").value
     var password = ""
 
-    if (document.getElementById("save_password").checked) {
+    if (save_password) {
         password = document.getElementById("password").value
     }
 
@@ -151,6 +165,8 @@ function save_configuration() {
 
     // save it, just for fun
     fs.writeFileSync(CONFIG_FILE_NAME, JSON.stringify(config))
+
+    alert("Configuration was saved as " + CONFIG_FILE_NAME)
 
 }
 

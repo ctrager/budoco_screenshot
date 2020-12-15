@@ -49,7 +49,7 @@
                 <div class="big_number">2 - Configure</div>
 
                 <div>
-                    <label>Budoco URL</label><input id="url" value="https://budoco.net/CreateIssue" />
+                    <label>Budoco URL</label><br><input id="url" value="https://budoco.net/CreateIssue" />
                 </div>
 
                 <div>
@@ -61,9 +61,6 @@
                 </div>
 
                 <div class="button_div">
-                    <div class="info">You can save your configuration for convenience, but it's not required.
-                        <br>If you save your password, it saves it plain clear text, not encrypted.
-                    </div>
                     <div class="button_div">
                         <button onclick="save_configuration()">Save Configuration</button>
                         <label><input type="checkbox" id="save_password" />Save password also?</label>
@@ -72,10 +69,14 @@
             </div>
         </div>
         <!--end 2-->
-
         <div class="steps123 step3">
             <div>
                 <div class="big_number">3 - Send</div>
+
+                <div id="description_div">
+
+                    <textarea maxlength="200" placeholder="Describe your screenshot here" id="description"></textarea>
+                </div>
 
                 <div class="button_div">
                     <button type="button" onclick="submit_form()" id="submit_button">Send to Budoco</button>
@@ -89,13 +90,10 @@
 
 
     <div class="image_container">
-        <div id="description_div">
-            <label id="description_label">Description</label>
-            <input maxlength="200" placeholder="My Budoco Screenshot" id="description" value="">
-        </div>
+
 
         <div class="image_frame">
-            <img class="display_image" style="display: none;" id="img" src="">
+            <img class="screenshot_img" style="display: none;" id="img" src="">
         </div>
     </div>
 
