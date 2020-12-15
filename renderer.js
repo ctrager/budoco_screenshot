@@ -97,9 +97,16 @@ function ajaxPost(url, params, description) {
         console.log(http.status)
 
         if (http.readyState == 4) {
+            document.getElementById("sending").style.display = "none"
             if (http.status == 200) {
-                console.log(http.status)
-                alert("success\n" + http.response)
+                console.log(http.response)
+                try {
+                    result = JSON.parse(http.response)
+                    alert("Success!\n" + "Created Issue #" + result.issue_id)
+                }
+                catch (e) {
+                    alert("Unexpected error: " + e);
+                }
             }
             else {
                 console.log(http.response)
@@ -107,7 +114,9 @@ function ajaxPost(url, params, description) {
             }
         }
     }
-    http.send(params);
+
+    document.getElementById("sending").style.display = "block"
+    setTimeout(function () {http.send(params)}, 100);
 }
 
 function handle_entire_or_region(el) {

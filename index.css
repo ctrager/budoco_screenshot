@@ -137,6 +137,12 @@ color: gray;
     height: 80px;
 }
 
+#sending {
+    padding: 10px;
+    border: 1px solid red;
+    background-color: yellow;
+}
+
 /*
 200 chars of text for testing
 aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb aaaaaaaaa bbbbbbbbb 222222222 bbbbbbbbb 222222222 bbbbbbbbb 222222222 bbbbbbbbb 222222222 bbbbbbbbb 222222222 zzzzzzzzz
