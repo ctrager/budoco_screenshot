@@ -1,12 +1,14 @@
 {
-    "name": "my-electron-app",
-    "version": "0.1.0",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron ."
-    },
-    "junk": "11.0.5",
-    "devDependencies": {
-        "electron": "11.0.5"
-    }
+  "name": "budoco_screenshot",
+  "description": "A screenshot app that works with the Budoco issue tracking web",
+  "repository": "https://github.com/ctrager/budoco_screenshot",
+  "license": "MIT",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^11.1.0"
+  }
 }

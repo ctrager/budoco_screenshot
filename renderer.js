@@ -1,8 +1,4 @@
 
-const {ipcRenderer} = require('electron')
-const fs = require('fs');
-const {url} = require('inspector');
-
 
 /*
 var myNotification
@@ -32,7 +28,7 @@ function capture() {
 
     console.log("max", max_width, max_height)
 
-    ipcRenderer.invoke('start-capture', entire_or_region, delay, max_width, max_height)
+    window.api.send('start-capture', entire_or_region, delay, max_width, max_height)
 }
 
 saved_data_url = null
@@ -40,7 +36,7 @@ canvas = null
 context = null
 
 // Receive the image from main.js and display it in canvas
-ipcRenderer.on('img', (event, data_url, width, height) => {
+window.api.receive("img-captured", (data_url, width, height) => {
 
     saved_data_url = data_url
 
@@ -73,7 +69,7 @@ ipcRenderer.on('img', (event, data_url, width, height) => {
         canvas.onmouseup = canvas_mouseup
         canvas.addEventListener("mouseleave", canvas_mouseup);
         canvas.addEventListener("mouseenter", (e) => {
-            if(e.buttons === 0){
+            if (e.buttons === 0) {
                 return;
             }
 
@@ -205,25 +201,22 @@ function handle_entire_or_region(el) {
     }
 }
 
-const CONFIG_FILE_NAME = "budoco_screenshot_config.txt"
 
 function on_load() {
-    if (fs.existsSync(CONFIG_FILE_NAME)) {
-        try {
-            var text = fs.readFileSync(CONFIG_FILE_NAME);
-            config = JSON.parse(text)
-            document.getElementById("url").value = config.url
-            document.getElementById("username").value = config.username
-            document.getElementById("password").value = config.password
-
-        } catch (e) {
-            console.log('Error:', e);
-        }
-    }
-
-    //ipcRenderer.invoke('start-capture', "entire", 0)
-
+    console.log("sending read-config-file")
+    window.api.send("read-config-file")
 }
+
+// read contents of config file
+window.api.receive("config-file-contents", (text) => {
+    console.log(text)
+    config = JSON.parse(text)
+    document.getElementById("url").value = config.url
+    document.getElementById("username").value = config.username
+    document.getElementById("password").value = config.password
+})
+
+
 
 function save_configuration() {
 
@@ -250,7 +243,9 @@ function save_configuration() {
     }
 
     // save it, just for fun
-    fs.writeFileSync(CONFIG_FILE_NAME, JSON.stringify(config))
+    window.api.send("save-config", JSON.stringify(config))
+
+    const CONFIG_FILE_NAME = "budoco_screenshot_config.txt"
 
     alert("Configuration was saved as " + CONFIG_FILE_NAME)
 

@@ -22,4 +22,5 @@ Under Construction
 ```
 npm install
 npm start
+npx @electron-forge/cli@latest import
 ```

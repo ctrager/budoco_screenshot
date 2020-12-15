@@ -1,7 +1,3 @@
-
-
-const {ipcRenderer} = require('electron')
-
 const hRule = document.getElementById("h-rule");
 const vRule = document.getElementById("v-rule");
 const region = document.getElementById("region");
@@ -66,7 +62,7 @@ document.addEventListener("mouseup", (e) => {
         return;
     }
     // tell main.js what our selection is.
-    ipcRenderer.invoke('selected', num(region.style.top), num(region.style.left), num(region.style.width), num(region.style.height))
+    window.api.send('selected-region', num(region.style.top), num(region.style.left), num(region.style.width), num(region.style.height))
 
     // The following doesn't actually matter because main.js is going to close this window.
     // but just in case, here's how to get back to an initial state.

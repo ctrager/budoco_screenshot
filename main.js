@@ -1,4 +1,4 @@
-const {app, BrowserWindow, screen, ipcMain, desktopCapturer} = require('electron')
+const {app, BrowserWindow, screen, ipcMain, desktopCapturer, contextBridge} = require('electron')
 const fs = require('fs');
 
 var main_win
@@ -8,21 +8,45 @@ var transparent_win
 app.commandLine.appendSwitch('enable-transparent-visuals');
 app.commandLine.appendSwitch('disable-gpu');
 
-
 function createWindow() {
-    console.log("inside createWindow")
+    console.log("createWindow")
     main_win = new BrowserWindow({
         width: 1000,
         height: 680,
         alwaysOnTop: false, // not needed
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: false, // is default value after Electron v5
+            contextIsolation: true, // protect against prototype pollution
+            enableRemoteModule: false, // turn off remote
+            preload: `${__dirname}/preload.js`, // use a preload script
         }
     })
 
     main_win.loadFile('index.html')
 
 }
+
+
+function createTransparentWindow() {
+    console.log("createTransparentWindow")
+    transparent_win = new BrowserWindow({
+        frame: false,
+        fullScreen: true,
+        transparent: true,
+        webPreferences: {
+            nodeIntegration: false, // is default value after Electron v5
+            contextIsolation: true, // protect against prototype pollution
+            enableRemoteModule: false, // turn off remote
+            preload: `${__dirname}/preload.js`,
+        }
+    })
+
+    transparent_win.loadFile('transparent.html')
+    transparent_win.setFullScreen(true);
+    transparent_win.setResizable(false);
+
+}
+
 
 // boiler plate
 app.whenReady().then(createWindow)
@@ -46,8 +70,8 @@ max_width = 0
 max_height = 0
 
 // rederer.js telling us to launch transparent window
-ipcMain.handle('start-capture', (event, entire_or_region, delay, max_w, max_h) => {
-    console.log("handling start-capture", entire_or_region, delay, max_w, max_h)
+ipcMain.on('start-capture', (event, entire_or_region, delay, max_w, max_h) => {
+    console.log("on start-capture", entire_or_region, delay, max_w, max_h)
     max_width = max_w
     max_height = max_h
 
@@ -75,29 +99,13 @@ function start_capture(entire_or_region, delay) {
 }
 
 
-function createTransparentWindow() {
-    transparent_win = new BrowserWindow({
-        frame: false,
-        fullScreen: true,
-        transparent: true,
-        webPreferences: {
-            nodeIntegration: true
-
-        }
-    })
-
-    transparent_win.loadFile('transparent.html')
-    transparent_win.setFullScreen(true);
-    transparent_win.setResizable(false);
-
-}
 
 
 // this is the transparent window giving us what was selected
 var selection_size
-ipcMain.handle('selected', (event, top, left, width, height) => {
+ipcMain.on('selected-region', (event, top, left, width, height) => {
 
-    console.log("main", top, left, width, height);
+    console.log("main selected-region", top, left, width, height);
     selection_size = {x: left, y: top, width: width, height: height}
     console.log("selection size", selection_size);
 
@@ -172,7 +180,7 @@ function capture(entire_or_region) {
             //fs.writeFileSync("AFTER_RESIZE.png", img.toPNG())
 
             // Pass the image to renderer.js to display
-            main_win.webContents.send('img', img.toDataURL(), width, height);
+            main_win.webContents.send('img-captured', img.toDataURL(), width, height);
 
             main_win.show()
             break
@@ -193,3 +201,20 @@ function capture(entire_or_region) {
 //         console.log('browser-window-blur', win.webContents.id)
 //     }
 // })
+
+const CONFIG_FILE_NAME = "budoco_screenshot_config.txt"
+
+ipcMain.on("read-config-file", (event, args) => {
+    console.log("on read-config-file", args)
+    if (fs.existsSync(CONFIG_FILE_NAME)) {
+        text = fs.readFileSync(CONFIG_FILE_NAME, {encoding: "utf8"})
+        main_win.webContents.send("config-file-contents", text);
+    }
+
+});
+
+
+ipcMain.on("save-config", (event, contents) => {
+    console.log("on save-config", contents)
+    text = fs.writeFileSync(CONFIG_FILE_NAME, contents, {encoding: "utf8"})
+});
