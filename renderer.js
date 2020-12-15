@@ -35,9 +35,14 @@ function capture() {
     ipcRenderer.invoke('start-capture', entire_or_region, delay, max_width, max_height)
 }
 
+saved_data_url = null
+canvas = null
+context = null
 
 // Receive the image from main.js and display it in canvas
 ipcRenderer.on('img', (event, data_url, width, height) => {
+
+    saved_data_url = data_url
 
     canvas = document.getElementById("canvas")
     context = canvas.getContext('2d')
@@ -57,9 +62,51 @@ ipcRenderer.on('img', (event, data_url, width, height) => {
         /// draw image to canvas
         context.drawImage(this, 0, 0) //  width, height) // , 0, 0, width, height);
         canvas.style.display = "inline-block"
+
+        context.lineWidth = 3;
+
+        // get ready for drawing
+        document.getElementById("click_on_image").className = ""
+        document.getElementById("color_select").disabled = false;
+        canvas.onmousedown = canvas_mousedown
+        canvas.onmousemove = canvas_mousemove
+        canvas.onmouseup = canvas_mouseup
+
     }
 
 })
+
+drawing_mode = false
+
+function canvas_mousedown(e) {
+    color_select = document.getElementById("color_select")
+    color = color_select.options[color_select.selectedIndex]
+    context.strokeStyle = color.innerText
+
+    drawing_mode = true
+    context.beginPath();
+    context.moveTo(e.offsetX, e.offsetY);
+}
+
+function canvas_mousemove(e) {
+    if (!drawing_mode)
+        return;
+
+    context.lineTo(e.offsetX, e.offsetY);
+    context.stroke();
+    context.beginPath();
+    context.moveTo(e.offsetX, e.offsetY);
+}
+
+function canvas_mouseup(e) {
+    if (!drawing_mode)
+        return;
+
+    context.lineTo(e.offsetX, e.offsetY);
+    context.stroke();
+
+    drawing_mode = false;
+}
 
 // user hit button to submit to budoco
 function submit_form() {

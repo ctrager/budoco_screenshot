@@ -41,7 +41,7 @@ label {
 .image_frame {
     grid-column-start: 1;
     width: 960px;
-    height: 430px; 
+    height: 380px; 
     background: black;
     display: flex;
     flex-direction: row;
