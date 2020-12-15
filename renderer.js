@@ -71,7 +71,14 @@ ipcRenderer.on('img', (event, data_url, width, height) => {
         canvas.onmousedown = canvas_mousedown
         canvas.onmousemove = canvas_mousemove
         canvas.onmouseup = canvas_mouseup
+        canvas.addEventListener("mouseleave", canvas_mouseup);
+        canvas.addEventListener("mouseenter", (e) => {
+            if(e.buttons === 0){
+                return;
+            }
 
+            canvas_mousedown();
+        });
     }
 
 })
