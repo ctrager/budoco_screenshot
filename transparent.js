@@ -61,7 +61,10 @@ document.addEventListener("mouseup", (e) => {
     e.preventDefault();
 
     console.log('selected', region.style.top, region.style.left, region.style.width, region.style.height)
-
+    if (isNaN(num(region.style.top))) {
+        // this can happen if mouseup occurs before other events
+        return;
+    }
     // tell main.js what our selection is.
     ipcRenderer.invoke('selected', num(region.style.top), num(region.style.left), num(region.style.width), num(region.style.height))
 
