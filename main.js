@@ -42,10 +42,14 @@ app.on('activate', () => {
 
 // end boiler plate
 
+max_width = 0
+max_height = 0
 
 // rederer.js telling us to launch transparent window
-ipcMain.handle('start-capture', (event, entire_or_region, delay) => {
-    console.log(entire_or_region, delay)
+ipcMain.handle('start-capture', (event, entire_or_region, delay, max_w, max_h) => {
+    console.log("handling start-capture", entire_or_region, delay, max_w, max_h)
+    max_width = max_w
+    max_height = max_h
 
     main_win.hide()
 
@@ -54,11 +58,11 @@ ipcMain.handle('start-capture', (event, entire_or_region, delay) => {
     // The 600 millisecond delay seems to help give our window time to hide.
     setTimeout(
         function () {start_capture(entire_or_region, delay)},
-        600)
+        400)
 })
 
 function start_capture(entire_or_region, delay) {
-    console.log(entire_or_region, delay)
+    console.log("actual start_capture", entire_or_region, delay)
 
     if (entire_or_region == "region") {
         createTransparentWindow()
@@ -136,11 +140,11 @@ function capture(entire_or_region) {
             width_factor = 1
             height_factor = 1
 
-            if (width > 960) {
-                width_factor = 960 / width
+            if (width > max_width) {
+                width_factor = max_width / width
             }
-            if (height > 420) {
-                height_factor = 420 / height
+            if (height > max_height) {
+                height_factor = max_height / height
             }
 
             console.log("FACTORS", width_factor, height_factor)

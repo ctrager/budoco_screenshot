@@ -51,7 +51,7 @@ label {
 
 canvas {
     flex: 0;
-    border: 3px solid red;
+    border: 2px solid red;
     display: none;
 }
 

@@ -22,46 +22,42 @@ function show_notification() {
 function capture() {
     entire_or_region = document.getElementById("entire").checked ? "entire" : "region"
     delay = document.getElementById("delay_input").value
-    ipcRenderer.invoke('start-capture', entire_or_region, delay)
+
+    // send max height, width so that main can do the resize
+    image_frame = document.getElementById("image_frame")
+
+    room_for_border = 6
+    max_width = num(image_frame.offsetWidth) - room_for_border
+    max_height = num(image_frame.offsetHeight) - room_for_border
+
+    console.log("max", max_width, max_height)
+
+    ipcRenderer.invoke('start-capture', entire_or_region, delay, max_width, max_height)
 }
 
 
-// Receive the image from main.js
+// Receive the image from main.js and display it in canvas
 ipcRenderer.on('img', (event, data_url, width, height) => {
-
-    // put image in img tag
-    //img_el = document.getElementById("img")
-    //img_el.src = data_url
-
-    // put image in form too
-    // document.getElementById("image_data").value = data_url
-
-    // show
-    //img_el.style.display = "block"
 
     canvas = document.getElementById("canvas")
     context = canvas.getContext('2d')
+
+    // clear the canvas
     context.clearRect(0, 0, canvas.width, canvas.height)
 
-    // context.imageSmoothingEnabled = false;
-    console.log("ww, hh", width, height)
-
-    var new_img = new Image();
-    new_img.src = data_url;
+    // resize canvas for incoming image
     canvas.width = width;
     canvas.height = height;
 
+    // create invisible image
+    var new_img = new Image();
+    new_img.src = data_url;
 
-    //canvas.prop("width", window.innerWidth)
-    //canvas.prop("height", window.innerHeight);
     new_img.onload = function () {
         /// draw image to canvas
-
         context.drawImage(this, 0, 0) //  width, height) // , 0, 0, width, height);
         canvas.style.display = "inline-block"
-
     }
-    //document.getElementById("image_frame").insertBefore(new_img, null)
 
 })
 
@@ -95,7 +91,6 @@ function submit_form() {
         alert("Description is required")
         return
     }
-
 
     var params = "username=" + encodeURIComponent(username)
         + "&password=" + encodeURIComponent(password)
@@ -207,3 +202,7 @@ function save_configuration() {
 
 }
 
+
+function num(n) {
+    return parseInt(n, 10);
+}
