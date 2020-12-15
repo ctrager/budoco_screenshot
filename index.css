@@ -22,7 +22,7 @@ button {
 }
 
 .button_div {
-    margin-top: 15px;
+    margin-top: 8px;
     margin-bottom: 5px;
     text-align: center;
     white-space: nowrap;
@@ -41,7 +41,7 @@ label {
 .image_frame {
     grid-column-start: 1;
     width: 960px;
-    height: 380px; 
+    height: 442px; 
     background: black;
     display: flex;
     flex-direction: row;
@@ -79,7 +79,7 @@ canvas {
 
 
 .big_number {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     color: #0c0;
@@ -119,7 +119,11 @@ color: gray;
 }
 
 #url {
-    width: 300px;
+    width: 200px;
+}
+
+#url_div {
+    white-space: nowrap;
 }
 
 #description_div {
@@ -128,8 +132,8 @@ color: gray;
 
 #description {
     font-family: "Lucida Console", monospace;
-    width: 320px;
-    height: 80px;
+    width: 336px;
+    height: 74px;
 }
 
 #sending {
