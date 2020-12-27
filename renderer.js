@@ -1,3 +1,4 @@
+"use strict"
 
 
 /*
@@ -16,24 +17,24 @@ function show_notification() {
 
 // Tell main.js to launch the transparent.html, to select a region.
 function capture() {
-    entire_or_region = document.getElementById("entire").checked ? "entire" : "region"
-    delay = document.getElementById("delay_input").value
+    var entire_or_region = document.getElementById("entire").checked ? "entire" : "region"
+    var delay = document.getElementById("delay_input").value
 
     // send max height, width so that main can do the resize
-    image_frame = document.getElementById("image_frame")
+    var image_frame = document.getElementById("image_frame")
 
-    room_for_border = 6
-    max_width = num(image_frame.offsetWidth) - room_for_border
-    max_height = num(image_frame.offsetHeight) - room_for_border
+    var room_for_border = 6
+    var max_width = num(image_frame.offsetWidth) - room_for_border
+    var max_height = num(image_frame.offsetHeight) - room_for_border
 
     console.log("max", max_width, max_height)
 
     window.api.send('start-capture', entire_or_region, delay, max_width, max_height)
 }
 
-saved_data_url = null
-canvas = null
-context = null
+var saved_data_url = null
+var canvas = null
+var context = null
 
 // Receive the image from main.js and display it in canvas
 window.api.receive("img-captured", (data_url, width, height) => {
@@ -79,7 +80,7 @@ window.api.receive("img-captured", (data_url, width, height) => {
 
 })
 
-drawing_mode = false
+var drawing_mode = false
 
 function canvas_mousedown(e) {
     color_select = document.getElementById("color_select")
@@ -171,7 +172,7 @@ function ajaxPost(url, params, description) {
             if (http.status == 200) {
                 console.log(http.response)
                 try {
-                    result = JSON.parse(http.response)
+                    var result = JSON.parse(http.response)
                     alert("Success!\n" + "Created Issue #" + result.issue_id)
                 }
                 catch (e) {
@@ -210,7 +211,7 @@ function on_load() {
 // read contents of config file
 window.api.receive("config-file-contents", (text) => {
     console.log(text)
-    config = JSON.parse(text)
+    var config = JSON.parse(text)
     document.getElementById("url").value = config.url
     document.getElementById("username").value = config.username
     document.getElementById("password").value = config.password
@@ -220,7 +221,7 @@ window.api.receive("config-file-contents", (text) => {
 
 function save_configuration() {
 
-    save_password = document.getElementById("save_password").checked
+    var save_password = document.getElementById("save_password").checked
     if (save_password) {
         if (!confirm("Your password will be saved in a file unencrypted.\n" +
             "Are you sure you want to save your password?")) {
@@ -235,7 +236,7 @@ function save_configuration() {
         password = document.getElementById("password").value
     }
 
-    config =
+    var config =
     {
         url: url,
         username: username,

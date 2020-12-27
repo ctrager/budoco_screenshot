@@ -1,3 +1,5 @@
+"use strict"
+
 const {app, BrowserWindow, screen, ipcMain, desktopCapturer, contextBridge} = require('electron')
 const fs = require('fs');
 
@@ -66,8 +68,8 @@ app.on('activate', () => {
 
 // end boiler plate
 
-max_width = 0
-max_height = 0
+var max_width = 0
+var max_height = 0
 
 // rederer.js telling us to launch transparent window
 ipcMain.on('start-capture', (event, entire_or_region, delay, max_w, max_h) => {
@@ -93,7 +95,7 @@ function start_capture(entire_or_region, delay) {
     }
     else {
         // entire
-        milliseconds = delay * 1000
+        var milliseconds = delay * 1000
         setTimeout(function () {capture("entire")}, milliseconds)
     }
 }
@@ -139,14 +141,14 @@ function capture(entire_or_region) {
                 img = source.thumbnail
             }
 
-            width = img.getSize().width
-            height = img.getSize().height
+            var width = img.getSize().width
+            var height = img.getSize().height
 
             console.log("ORIGINAL SIZE", width, height)
 
             // resize, keep aspect ratio
-            width_factor = 1
-            height_factor = 1
+            var width_factor = 1
+            var height_factor = 1
 
             if (width > max_width) {
                 width_factor = max_width / width
@@ -173,8 +175,8 @@ function capture(entire_or_region) {
                 }
             }
 
-            width = img.getSize().width
-            height = img.getSize().height
+            var width = img.getSize().width
+            var height = img.getSize().height
             console.log("AFTER SIZE", width, height)
 
             //fs.writeFileSync("AFTER_RESIZE.png", img.toPNG())
@@ -207,14 +209,13 @@ const CONFIG_FILE_NAME = "budoco_screenshot_config.txt"
 ipcMain.on("read-config-file", (event, args) => {
     console.log("on read-config-file", args)
     if (fs.existsSync(CONFIG_FILE_NAME)) {
-        text = fs.readFileSync(CONFIG_FILE_NAME, {encoding: "utf8"})
+        var text = fs.readFileSync(CONFIG_FILE_NAME, {encoding: "utf8"})
         main_win.webContents.send("config-file-contents", text);
     }
 
 });
 
-
 ipcMain.on("save-config", (event, contents) => {
     console.log("on save-config", contents)
-    text = fs.writeFileSync(CONFIG_FILE_NAME, contents, {encoding: "utf8"})
+    fs.writeFileSync(CONFIG_FILE_NAME, contents, {encoding: "utf8"})
 });

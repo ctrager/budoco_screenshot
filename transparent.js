@@ -1,3 +1,5 @@
+"use strict"
+
 const hRule = document.getElementById("h-rule");
 const vRule = document.getElementById("v-rule");
 const region = document.getElementById("region");

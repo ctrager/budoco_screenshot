@@ -1,3 +1,5 @@
+"use strict"
+
 // from https://github.com/electron/electron/issues/9920#issuecomment-575839738
 
 // https://github.com/electron/electron/issues/23506
